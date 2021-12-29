@@ -1,13 +1,12 @@
 const express = require('express'); // Include ExpressJS
 const app = express(); // Create an ExpressJS app
 const bodyParser = require('body-parser'); // Middleware 
-
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Route to Login Page
 app.post('/login', verifyUser, (req, res) => {
   //Mock user
-  console.log(req)
   const user = {
     id: Math.random(),
     username: req.body.username,
@@ -24,17 +23,17 @@ function verifyUser(req, res, next) {
     username: req.body.username,
     email: req.body.email,
   }
-  if (typeof user.username !== '' || typeof user.email !== '') {
+  if (user.username !== undefined || user.email !== undefined) {
     next();
   }
   else {
     //Forbidden
-    if (typeof user.username === '') {
+    if (user.username == undefined) {
       res.send(
         'Please provide username'
       );
     }
-    else if (typeof user.email === '') {
+    else if (user.email == undefined) {
       res.send(
         'Please provide email'
       );
